@@ -154,8 +154,8 @@
         deleteTooltip: 'Remove',
         pieChart: {
           data: {
-            labels: ['80%', '20%'],
-            series: [80,20]
+            labels: ['40%', '20%', '40%'],
+            series: [40,40]
           }
         },
         // lineChart: {
@@ -240,6 +240,10 @@
             this.barChart.data.series[0] =  bin_levels_per_hour.map(entry => entry.avg_bin_level);
             this.barChart.data.series[1] = bin_air_quality_per_hour.map(entry => entry.avg_bin_air_quality)
 
+            let percentage_to_empty = this.calculatePercentagePerformance(bin_levels_per_hour);
+
+            this.pieChart.data.labels = [percentage_to_empty + '%',(100 - percentage_to_empty) + '%'];
+            this.pieChart.data.series = [percentage_to_empty,(100 - percentage_to_empty)];
             this.isprocessing = false;
 
           })
@@ -247,24 +251,26 @@
             console.error("Error:", error);
           });
       },
-      calculateAverageTime(data){
-        // let totalTime = 0;
-        // let count = 0;
-        // let threshold = 70;
-        //
-        // let lastValue = data[0].avg_bin_level > threshold;
-        //
-        // for (let i = 1; i < data.length; i++) {
-        //   const currentValue = data[i].avg_bin_level > threshold;
-        //
-        //   if (lastValue && currentValue <= threshold) {
-        //     totalTime += i;
-        //     count++;
-        //     lastValue = false;
-        //   }
-        // }
-        //
-        // return count > 0 ? totalTime / count : 0;
+      calculatePercentagePerformance(binLevelPerHourGraph){
+        let aboveThreshold = false;
+        let totalTimeAboveThreshold = 0;
+        let totalTime = 0;
+
+        for (let i = 0; i < binLevelPerHourGraph.length; i++) {
+          const binLevel = binLevelPerHourGraph[i].avg_bin_level;
+
+          if (binLevel > 70) {
+            aboveThreshold = true;
+          } else if (aboveThreshold && binLevel <= 70) {
+            totalTimeAboveThreshold += 3; // Assuming each period is 3 hours
+            aboveThreshold = false;
+          }
+
+          totalTime += 3; // Assuming each period is 3 hours
+        }
+
+        return (totalTimeAboveThreshold / totalTime) * 100;
+
       }
     },
 
