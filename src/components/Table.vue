@@ -17,7 +17,7 @@
       <slot :row="item">
         <td>{{ index + 1}}</td>
         <td v-for="column in columns" :key="column" v-if="hasValue(item, column)">
-          {{itemValue(item, column)}}
+          <span v-html="itemValue(item, column)"></span>
         </td>
         <td>
           <button class="btn btn-primary mr-2"><i class="nc-icon nc-ruler-pencil"></i></button>
@@ -63,6 +63,8 @@ export default {
         } else if (column === 'bin_reference_number') {
           // Cut off first 5 characters for 'bin_reference_number' column
           return this.cutOffFirstCharacters(value, 14);
+        } else if(column === 'status'){
+          return this.formatStatusColor(value);
         }
 
         return this.checkEmptyColumn(value);
@@ -73,6 +75,18 @@ export default {
           return 'N/A';
         }
         return value;
+      },
+
+      formatStatusColor(value){
+        if(value == 'Full'){
+          return '<span class="badge badge-danger pr-2 pl-2">' + value + '</span>'
+        }
+        else if(value == 'Filling'){
+          return '<span class="badge badge-success pr-2 pl-2">' + value + '</span>'
+        }
+        else if(value == 'Empty'){
+          return '<span class="badge badge-primary pr-2 pl-2">' + value + '</span>'
+        }
       },
 
       formatCreatedAt(value) {
