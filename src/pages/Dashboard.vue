@@ -41,7 +41,7 @@
         <div class="col-xl-3 col-md-6">
           <stats-card>
             <div slot="header" class="icon-info">
-              <i class="nc-icon nc-nc-check-2 text-success"></i>
+              <i class="nc-icon nc-check-2 text-success"></i>
             </div>
             <div slot="content">
               <p class="card-category">Empty</p>

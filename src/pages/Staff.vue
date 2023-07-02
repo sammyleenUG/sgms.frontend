@@ -25,7 +25,7 @@
               <l-table v-if="!isloading && supervisors.length > 0" class="table-hover table-striped table-sm"
                        :columns="columns"
                        :data="supervisors"
-                       endpoint="staff"
+                       endpoint="delete-staff"
               >
               </l-table>
             </div>

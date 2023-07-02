@@ -137,7 +137,7 @@ export default {
                   },
                 })
                 .then(response => {
-                  this.showSuccessMessage("Item deleted successfully");
+                this.showSuccessMessage("Item deleted successfully");
                   let app = this;
                   setTimeout(function(){
                     app.$router.go();
