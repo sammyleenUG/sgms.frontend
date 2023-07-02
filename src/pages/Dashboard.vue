@@ -262,11 +262,11 @@
           if (binLevel > 70) {
             aboveThreshold = true;
           } else if (aboveThreshold && binLevel <= 70) {
-            totalTimeAboveThreshold += 3; // Assuming each period is 3 hours
+            totalTimeAboveThreshold += 20; // Assuming each period is 20 hours
             aboveThreshold = false;
           }
 
-          totalTime += 3; // Assuming each period is 3 hours
+          totalTime += 20; // Assuming each period is 20 hours
         }
 
         return (totalTimeAboveThreshold / totalTime) * 100;
