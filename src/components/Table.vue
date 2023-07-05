@@ -1,6 +1,6 @@
 <template>
 
-  <table class="table" id="myDataTable">
+  <table class="table" id="myDataTable" ref="export_table">
     <thead>
       <slot name="columns">
         <tr>
@@ -8,7 +8,7 @@
           <th v-for="column in columns" :key="column">
             {{ formatColumnName(column) }}
           </th>
-          <th></th>
+          <th v-if="endpoint != 'export'"></th>
         </tr>
       </slot>
     </thead>
@@ -19,7 +19,7 @@
         <td v-for="column in columns" :key="column" v-if="hasValue(item, column)">
           <span v-html="itemValue(item, column)"></span>
         </td>
-        <td>
+        <td v-if="endpoint != 'export'">
           <button class="btn btn-primary mr-2"><i class="nc-icon nc-ruler-pencil"></i></button>
           <button class="btn btn-danger" @click="deleteItem(item.id)"><i class="nc-icon nc-simple-remove"></i></button>
         </td>
@@ -48,9 +48,40 @@ export default {
       endpoint: String,
     },
     mounted() {
-      $(this.$el).DataTable();
+
+      if(this.$props.endpoint != "export"){
+        $(this.$el).DataTable();
+      }
+
+      let app = this;
+
+      if(this.$props.endpoint == "export"){
+        Swal.fire({
+          title: 'Confirm?',
+          text: "Would you like to continue with the export?",
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          cancelButtonText: 'No',
+          confirmButtonText: 'Yes!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            app.download();
+          }
+        })
+      }
+
     },
     methods: {
+      download(){
+        const XLSX = require("xlsx");
+
+        const wb = XLSX.utils.table_to_book(this.$refs.export_table);
+        XLSX.writeFile(wb, 'exports.xlsx')
+
+      },
+
       hasValue (item, column) {
         return item[column.toLowerCase()] !== 'undefined'
       },
