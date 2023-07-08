@@ -1,6 +1,6 @@
-Setup
+**Setup**
 
-run the following commands
+<p>Run the following commands</p>
 
-npm install
-npm run dev
+- npm install
+- npm run dev
